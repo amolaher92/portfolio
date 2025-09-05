@@ -1,4 +1,8 @@
-name: CI/CD Pipeline
+# 🚀 CI/CD Pipeline for Portfolio
+# Runs on push and pull requests to main branch.
+# Includes linting, formatting, type-checking, unit tests, E2E tests, and build step.
+
+name: 🛠️ Portfolio CI/CD Pipeline
 
 on:
   push:
@@ -7,48 +11,45 @@ on:
     branches: [main]
 
 jobs:
-  ci-cd:
+  linux-build-test:
+    name: 🐧 Build & Test on Linux (Ubuntu)
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout code
+      # 📁 Checkout Code
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js
+      # 🔧 Node Environment Setup
+      - name: 🔧 Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: 'yarn'
 
-      - name: 📦 Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
+      # 📦 Install Dependencies
+      - name: 📦 Install dependencies with Yarn
+        run: yarn install --frozen-lockfile
 
-      - name: 📥 Install dependencies
-        run: pnpm install --frozen-lockfile
+      # ✅ Lint and Format Checks
+      - name: 🧼 Run ESLint for code quality
+        run: yarn lint
 
-      - name: 🔍 Lint
-        run: pnpm run lint
+      - name: 💅 Check code formatting with Prettier
+        run: yarn format
 
-      - name: ✅ Type check
-        run: pnpm run type-check
+      # 🔍 Type Checking
+      - name: 🔍 Run TypeScript type checks
+        run: yarn type-check
 
-      - name: 🧪 Run unit tests
-        run: pnpm run test
+      # 🧪 Unit Tests with Vitest
+      - name: 🧪 Run unit tests with coverage
+        run: yarn test
 
-      - name: 🎭 Install Playwright
-        run: pnpm exec playwright install --with-deps
+      # 🎭 Playwright E2E Tests
+      - name: 🎭 Run Playwright E2E tests
+        run: yarn test:e2e
 
-      - name: 🌐 Run E2E tests
-        run: pnpm run test:e2e
-
-      - name: 📦 Build project
-        run: pnpm run build
-
-      - name: 🚀 Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ github.token }}
-          publish_dir: ./dist
+      # 🏗️ Build
+      - name: 🏗️ Build the project
+        run: yarn build
