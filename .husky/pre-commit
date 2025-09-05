@@ -25,10 +25,4 @@ echo "🔍 Running lint-staged and commit checks..."
 pnpm lint-staged || { echo "❌ Lint-staged checks failed. Please fix the issues and follow conventional commit format."; exit 1; }
 
 echo "✅ All pre-commit quality checks passed successfully!"
-echo "📝 Remember to use conventional commit format:"
-echo "  feat: add new feature"
-echo "  fix: bug fix"
-echo "  docs: documentation changes"
-echo "  style: formatting, missing semi colons, etc"
-echo "  refactor: code change that neither fixes a bug nor adds a feature"
-echo "  test: adding or updating tests"
+
