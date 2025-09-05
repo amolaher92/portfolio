@@ -1,14 +1,13 @@
-name: 🚀 Simple CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: ['**']
+    branches: [main]
   pull_request:
-    branches: ['main']
+    branches: [main]
 
 jobs:
-  ci:
-    name: 🔨 Build & Test
+  ci-cd:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,10 +32,23 @@ jobs:
         run: pnpm run lint
 
       - name: ✅ Type check
-        run: pnpm run typecheck
+        run: pnpm run type-check
 
-      - name: 🧪 Run tests
+      - name: 🧪 Run unit tests
         run: pnpm run test
 
-      - name: 📦 Build
+      - name: 🎭 Install Playwright
+        run: pnpm exec playwright install --with-deps
+
+      - name: 🌐 Run E2E tests
+        run: pnpm run test:e2e
+
+      - name: 📦 Build project
         run: pnpm run build
+
+      - name: 🚀 Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: ./dist
