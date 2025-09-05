@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Pre-commit hook to ensure code quality before committing
+# This hook will:
+# 1. Run ESLint to fix TypeScript/JavaScript files
+# 2. Run Prettier to format all staged files
+# 3. Type check TypeScript files
+echo "🔍 Running pre-commit checks..."
+
+# Run lint-staged configuration from package.json
+# This includes ESLint and Prettier checks
+pnpm lint-staged || { echo "❌ Code style checks failed. Please fix the issues and try again."; exit 1; }
+
+# Run TypeScript type checking
+echo "📝 Checking TypeScript types..."
+pnpm type-check || { echo "❌ TypeScript type check failed. Please fix type errors."; exit 1; }
+
+echo "✅ Pre-commit checks passed successfully!"

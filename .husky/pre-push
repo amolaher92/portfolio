@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Prevent pushing code with linting errors
+echo "🔍 Running linting checks..."
+pnpm lint || { echo "❌ Linting failed. Please fix the errors before pushing."; exit 1; }
+
+# Ensure all unit tests pass
+echo "🧪 Running unit tests..."
+pnpm test || { echo "❌ Unit tests failed. Please fix the failing tests."; exit 1; }
+
+# Run end-to-end tests to ensure application functionality
+echo "🚀 Running E2E tests..."
+pnpm test:e2e || { echo "❌ E2E tests failed. Please check the test report."; exit 1; }
+
+echo "✅ All checks passed successfully!"

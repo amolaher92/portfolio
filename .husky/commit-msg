@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Commit Message Hook
+# This hook ensures commits follow the Conventional Commits specification
+# Format: <type>[optional scope]: <description>
+#
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+# Example: feat(auth): add login functionality
+#         fix: resolve memory leak
+#         docs: update README
+
+echo "🔍 Checking commit message format..."
+
+# Run commitlint to validate the commit message
+if npx --no -- commitlint --edit "$1"; then
+    echo "✅ Commit message follows conventional format!"
+    exit 0
+else
+    echo "❌ Invalid commit message format."
+    echo "Please use the format: <type>[optional scope]: <description>"
+    echo "Available types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+    echo "Examples:"
+    echo "  feat(auth): add login functionality"
+    echo "  fix: resolve memory leak"
+    echo "  docs: update README"
+    exit 1
+fi
