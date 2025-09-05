@@ -1,19 +1,34 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Pre-commit hook to ensure code quality before committing
-# This hook will:
-# 1. Run ESLint to fix TypeScript/JavaScript files
-# 2. Run Prettier to format all staged files
-# 3. Type check TypeScript files
-echo "🔍 Running pre-commit checks..."
+# Pre-commit Quality Check Pipeline
+# This hook ensures code quality before committing changes
+# First runs all tests, then checks code formatting and conventional commits
 
-# Run lint-staged configuration from package.json
-# This includes ESLint and Prettier checks
-pnpm lint-staged || { echo "❌ Code style checks failed. Please fix the issues and try again."; exit 1; }
-
-# Run TypeScript type checking
+# 1. TypeScript Type Checking
 echo "📝 Checking TypeScript types..."
-pnpm type-check || { echo "❌ TypeScript type check failed. Please fix type errors."; exit 1; }
+pnpm type-check || { echo "❌ Type check failed. Please fix type errors."; exit 1; }
 
-echo "✅ Pre-commit checks passed successfully!"
+# 2. Unit Tests (Vitest)
+echo "🧪 Running unit tests..."
+pnpm test || { echo "❌ Unit tests failed. Please fix failing tests."; exit 1; }
+
+# Once all tests pass, check code quality
+echo "✨ Tests passed! Now checking code quality..."
+
+# 4. Full Codebase Format Check
+echo "� Checking code formatting..."
+pnpm format || { echo "❌ Format check failed. Run 'pnpm format:fix' to fix issues."; exit 1; }
+
+# 5. Staged Files and Conventional Commit Check
+echo "🔍 Running lint-staged and commit checks..."
+pnpm lint-staged || { echo "❌ Lint-staged checks failed. Please fix the issues and follow conventional commit format."; exit 1; }
+
+echo "✅ All pre-commit quality checks passed successfully!"
+echo "📝 Remember to use conventional commit format:"
+echo "  feat: add new feature"
+echo "  fix: bug fix"
+echo "  docs: documentation changes"
+echo "  style: formatting, missing semi colons, etc"
+echo "  refactor: code change that neither fixes a bug nor adds a feature"
+echo "  test: adding or updating tests"
