@@ -6,10 +6,10 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary';
 }
 
-export const Button: React.FC<ButtonProps> = ({ 
-  onClick, 
-  children, 
-  variant = 'primary' 
+export const Button: React.FC<ButtonProps> = ({
+  onClick,
+  children,
+  variant = 'primary',
 }) => {
   return (
     <button
