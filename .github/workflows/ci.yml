@@ -1,6 +1,6 @@
 # 🚀 CI/CD Pipeline for Portfolio
-# Runs on push and pull requests to main branch.
-# Includes linting, formatting, type-checking, unit tests, E2E tests, and build step.
+# Runs on push and pull requests to the main branch
+# Includes linting, formatting, type-checking, unit tests, E2E tests, and build step
 
 name: 🛠️ Portfolio CI/CD Pipeline
 
@@ -25,26 +25,30 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: yarn
 
       # 📦 Install Dependencies
       - name: 📦 Install dependencies with Yarn
         run: yarn install --frozen-lockfile
+
+      # 🎭 Install Playwright Browsers
+      - name: 🎭 Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # 🔍 Type Checking
+      - name: 🔍 Run TypeScript type checks
+        run: yarn type-check
 
       # ✅ Lint and Format Checks
       - name: 🧼 Run ESLint for code quality
         run: yarn lint
 
       - name: 💅 Check code formatting with Prettier
-        run: yarn format
-
-      # 🔍 Type Checking
-      - name: 🔍 Run TypeScript type checks
-        run: yarn type-check
+        run: yarn format:check
 
       # 🧪 Unit Tests with Vitest
       - name: 🧪 Run unit tests with coverage
-        run: yarn test
+        run: yarn test --coverage
 
       # 🎭 Playwright E2E Tests
       - name: 🎭 Run Playwright E2E tests
