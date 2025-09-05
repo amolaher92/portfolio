@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { test as base } from '@playwright/test';
 import { TestHelpers } from '../helpers/test-helpers';
 
@@ -8,7 +9,7 @@ interface TestFixtures {
 
 // Extend the base test with our fixtures
 export const test = base.extend<TestFixtures>({
-  helpers: async ({ page }, use) => {
-    await use(new TestHelpers(page));
+  helpers: async ({ page }, useFixture) => {
+    await useFixture(new TestHelpers(page));
   },
 });
